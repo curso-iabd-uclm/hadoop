@@ -1,14 +1,12 @@
-/*
-* 
 
 -- 1.1 Fase de Extracción LOAD
-csv_data = LOAD 'user/cloudera/opinions/opinions.csv' USING PigStorage (',') as
-(review_id:chararray, score:chararray, title:chararray);
+csv_data = LOAD '/user/cloudera/EOpinions.csv' USING PigStorage (',') as
+(class:chararray, opinion:chararray);
 
 -- DUMP csv_data; -- para comprobaciones
 
--- 1.2 Generar colección de comentarios (campo 4)
-comentarios = FOREACH csv_data GENERATE $4;
+-- 1.2 Generar colección de comentarios (campo 1)
+comentarios = FOREACH csv_data GENERATE $1;
 
 -- DUMP csv_data; -- para comprobaciones
 
@@ -21,10 +19,10 @@ wordfile_flat = FOREACH comentarios GENERATE FLATTEN (TOKENIZE($0)) as wordin;
 wordfile_grpd = GROUP wordfile_flat by wordin;
 
 -- 2.3 Calculo frecuencia de cada palabra
-word_counts = FOREACH wordfile_grpd GENERATE group, COUNT(word_file_flat.wordin) as cnt; 
+word_counts = FOREACH wordfile_grpd GENERATE group, COUNT(wordfile_flat.wordin) as cnt; 
 
 -- 2.4 Ordenación/Ranking de palabras por frecuencia
-word_cound_des = ORDER word_counts BY cnt DESC;
+word_count_des = ORDER word_counts BY cnt DESC;
 
 -- 3. Carga/almacenamiento
-STORE word_count_des into "/user/cloudera/pig/out";
+STORE word_count_des into '/user/cloudera/pig/out';
