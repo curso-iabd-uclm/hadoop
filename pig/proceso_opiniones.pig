@@ -1,6 +1,6 @@
 
 -- 1.1 Fase de Extracción LOAD
-csv_data = LOAD '/user/cloudera/EOpinions.csv' USING PigStorage (',') as
+csv_data = LOAD '/user/cloudera/pig/Eopinions.csv' USING PigStorage (',') as
 (class:chararray, opinion:chararray);
 
 -- DUMP csv_data; -- para comprobaciones
