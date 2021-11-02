@@ -1,0 +1,19 @@
+cd workspace
+mkdir pig
+cd pig
+wget https://github.com/curso-iabd-uclm/hadoop/raw/main/pig/Eopinions.csv
+hdfs dfs -mkdir pig
+hdfs dfs -put *.csv /user/cloudera/pig
+hdfs dfs -ls pig
+wget https://github.com/curso-iabd-uclm/hadoop/raw/main/pig/proceso_opiniones.pig
+gedit proceso_opiniones.pig
+pig proceso_opiniones.pig
+hdfs dfs -ls /user/cloudera/pig/out
+hdfs dfs -cat /user/cloudera/pig/out/* | head
+
+rm pig/*
+rmdir pig
+hdfs dfs -rm pig/out/*
+hdfs dfs -rmdir pig/out/
+hdfs dfs -rm pig/*
+hdfs dfs -rmdir pig
