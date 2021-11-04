@@ -16,12 +16,12 @@ generation:chararray);
 
 -- Consultas
 
--- Países ordenados por número total de suicidios
+-- Países ordenados por número total 
 
--- Agrupamos los la tasa de suicidios por país
+-- Agrupamos los la tasa  por país
 country_rates_casualties = GROUP casualtyRates By country;
 
--- Por cada uno de los países sumamos el número total de suicidios
+-- Por cada uno de los países sumamos el número total 
 country_rates_casualties_no = FOREACH country_rates_casualties GENERATE group,SUM(casualtiRates.casualties_no) AS total;
 
 -- Ordenamos de forma descendente los resultados
@@ -31,9 +31,9 @@ country_rates_casualties_no = ORDER country_rates_casualties_no BY total DESC;
 dump country_rates_casualties_no;
 
 
--- Porcentajes de suicidios por género en España
+-- Porcentajes  por género en España
 
--- Filtramos por la tasa de suicidios en España
+-- Filtramos por la tasa  en España
 casualties_spain = FILTER casualtiRates BY country == 'Spain';
 
 -- Filtramos por hombres
@@ -69,7 +69,7 @@ dump female_casualti_rates_spain;
 dump male_casualti_rates_spain;
 
 
--- Calcular el aumento de suicidios entre antes y después del año 2000
+-- Calcular el aumento  entre antes y después del año 2000
 
 -- Filtrar por suicidios antes del 2000
 casualties_before_2000 = FILTER casualtiRates BY year <= 2000;
@@ -91,13 +91,13 @@ proportion_2000 = DISTINCT proportion_2000;
 -- Mostramos los resultados
 dump proportion_2000;
 
--- Comparar número de suicidios de cada país con su gdp_for_year
+-- Comparar número  de cada país con su gdp_for_year
 
 -- Filtrar por los suicidios por el año 2015
 casualties_2010 = FILTER casualtiRates BY year == 2010;
 -- Agrupar por paises
 casualties_2010_by_country = GROUP casualties_2010 BY country;
--- Sumar el numero de suicidios por paises.
+-- Sumar el numero  por paises.
 casualties_2010_by_country = FOREACH casualties_2010_by_country GENERATE group, SUM(casualties_2010.casualties_no) AS total, FLATTEN(casualties_2010.gdp_per_capita_dolar) AS gdp;
 -- Eliminar duplicados
 casualties_2010_by_country = DISTINCT casualties_2010_by_country;
@@ -107,14 +107,14 @@ casualties_2010_by_country = ORDER casualties_2010_by_country BY gdp DESC;
 dump casualties_2010_by_country;
 
 
--- Número de suicidios por franja de edad para cada generación
+-- Número  por franja de edad para cada generación
 
--- Obtenemos las columnas que hacen referencia al numero de suicidios, la edad y la generacion y generamos una nueva
+-- Obtenemos las columnas que hacen referencia al numero , la edad y la generacion y generamos una nueva
 casualties_by_generation_by_age = FOREACH casualtiRates GENERATE casualties_no AS casualties_no, age AS age, generation AS generation, CONCAT(generation, '_', age) AS gen_age;
 
 -- agrupamos por la nueva columna
 casualties_by_generation_by_age = GROUP casualties_by_generation_by_age BY gen_age;
--- Obtenemos la suma de suicidios por cada generacion en los distintos rangos de edad que abarcan cada una de ellas.
+-- Obtenemos la suma  por cada generacion en los distintos rangos de edad que abarcan cada una de ellas.
 casualties_by_generation_by_age = FOREACH casualties_by_generation_by_age GENERATE STRSPLIT(group, '_', 2) AS generation_age, SUM(casualties_by_generation_by_age.casualties_no);
 -- Mostramos los resultados
 dump casualties_by_generation_by_age;
